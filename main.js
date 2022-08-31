@@ -4,7 +4,7 @@
 // @version      1.0
 // @description  Add a search bar to trashpahe!
 // @author       You
-// @match        https://trash.animepahe.com
+// @match        https://trash.animepahe.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        none
 // ==/UserScript==
@@ -57,16 +57,16 @@ ${resetCss}
   width: 400px;
   background-color: #000;
   right: 10%;
+  //box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
 }
 
 .logo {
   display: flex;
 }
 
-
-
 .results-list {
   // margin: 10px;
+  background-color: #171717;
 
 }
 
@@ -161,6 +161,11 @@ ${resetCss}
   justify-content: center;
   cursor: pointer;
   z-index: 100;
+  border: none;
+}
+
+.hide-button:active {
+  background-color: #aa0149;
 }
 
 
@@ -265,7 +270,7 @@ ${resetCss}
           tmpdiv.appendChild(season);
 
           const tmpA = document.createElement("a");
-          tmpA.setAttribute("href", thing.session);
+          tmpA.setAttribute("href", `/anime/${thing.session}`);
           // tmpA.setAttribute("target", "_blank");
           // tmpA.setAttribute("rel", "noopener noreferrer");
           tmpA.setAttribute("class", "result-link");
