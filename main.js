@@ -123,6 +123,7 @@ ${resetCss}
   line-height: 1;
   width: 100%;
   position: relative;
+  padding-left: 10px;
 }
 
 .poster {
