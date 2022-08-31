@@ -2,7 +2,7 @@
 
 Add a search bar to trashpahe!
 
-![example](https://safe.ayo.icu/9AMGaxeI.png)
+![example](https://safe.ayo.icu/FUlECgZU.png)
 
 # How To
 
