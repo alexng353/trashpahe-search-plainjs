@@ -16,4 +16,4 @@ Yeah. I know about it but idgaf because the main site doesn't even have a search
 
 ### Bad spacing between the thumbnail and text box
 
-Css moment
+~~Css moment~~ nvm i fixed it
