@@ -1,14 +1,30 @@
-const Logo = document.getElementsByClassName("logo")[0];
+// ==UserScript==
+// @name         TrashPahe SearchBar
+// @namespace    https://ayo.icu
+// @version      1.0
+// @description  Add a search bar to trashpahe!
+// @author       You
+// @match        https://trash.animepahe.com
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
+// @grant        none
+// ==/UserScript==
 
-const inputNode = document.createElement("input");
-inputNode.setAttribute("type", "text");
-inputNode.setAttribute("placeholder", "Search");
-inputNode.setAttribute("id", "search");
-inputNode.setAttribute("class", "bar");
-inputNode.setAttribute("onchange", "sigh()");
+(function () {
+  "use strict";
 
-const style = document.createElement("style");
-const resetCss = `
+  const Logo = document.getElementsByClassName("logo")[0];
+
+  const inputNode = document.createElement("input");
+  inputNode.setAttribute("type", "text");
+  inputNode.setAttribute("placeholder", "Search");
+  inputNode.setAttribute("id", "search");
+  inputNode.setAttribute("class", "bar");
+  inputNode.addEventListener("change", (event) => {
+    sigh();
+  });
+
+  const style = document.createElement("style");
+  const resetCss = `
 .results span {
   margin: 0px;
 }
@@ -17,7 +33,7 @@ const resetCss = `
   margin: 0px;
 }
 `;
-style.innerHTML = `
+  style.innerHTML = `
 ${resetCss}
 .bar {
   width: 200px;
@@ -150,125 +166,124 @@ ${resetCss}
 
 `;
 
-function createResults() {
   const results = document.createElement("div");
   results.setAttribute("id", "results");
   results.setAttribute("class", "results");
   Logo.appendChild(results);
-}
 
-createResults();
+  const hideButton = document.createElement("button");
 
-const hideButton = document.createElement("button");
-hideButton.setAttribute("onclick", "hideResults()");
-hideButton.setAttribute("class", "hide-button");
-hideButton.appendChild(document.createTextNode("Clear"));
-Logo.appendChild(hideButton);
+  hideButton.setAttribute("class", "hide-button");
+  hideButton.appendChild(document.createTextNode("Clear"));
+  Logo.appendChild(hideButton);
 
-function hideResults() {
-  const searchbar = document.getElementById("search");
-  // set searchbar value to empty string
-  searchbar.value = "";
+  hideButton.addEventListener("click", (event) => {
+    hideResults();
+  });
 
-  const results = document.getElementById("results-list");
-  results.replaceChildren();
-}
+  function hideResults() {
+    const searchbar = document.getElementById("search");
+    // set searchbar value to empty string
+    searchbar.value = "";
 
-const body = document.getElementsByTagName("body")[0];
-body.appendChild(style);
+    const results = document.getElementById("results-list");
+    results.replaceChildren();
+  }
 
-results.appendChild(inputNode);
+  const body = document.getElementsByTagName("body")[0];
+  body.appendChild(style);
 
-const results_list = document.createElement("div");
-results_list.setAttribute("id", "results-list");
-results_list.setAttribute("class", "results-list");
-results.appendChild(results_list);
+  results.appendChild(inputNode);
 
-inputNode.addEventListener("focus", function (event) {
-  console.log("focus");
-});
+  const results_list = document.createElement("div");
+  results_list.setAttribute("id", "results-list");
+  results_list.setAttribute("class", "results-list");
+  results.appendChild(results_list);
 
-results_list.addEventListener("focus", function (event) {
-  console.log("focused on results");
-});
+  inputNode.addEventListener("focus", function (event) {
+    console.log("focus");
+  });
 
-results_list.addEventListener("blur", function (event) {
-  console.log("blurred on results");
-  results_list.style.display = "none";
-});
+  results_list.addEventListener("focus", function (event) {
+    console.log("focused on results");
+  });
 
-// inputNode.addEventListener("blur", function (event) {
-//   console.log("blur");
-//   results.style.display = "none";
-//   console.log("hidden");
-// });
+  results_list.addEventListener("blur", function (event) {
+    console.log("blurred on results");
+    results_list.style.display = "none";
+  });
 
-function sigh() {
-  const search = document.getElementById("search").value;
-  fetch("https://apapi.ayo.icu/api?m=search&q=" + search)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
+  // inputNode.addEventListener("blur", function (event) {
+  //   console.log("blur");
+  //   results.style.display = "none";
+  //   console.log("hidden");
+  // });
 
-      results_list.replaceChildren();
+  function sigh() {
+    const search = document.getElementById("search").value;
+    fetch("https://apapi.ayo.icu/api?m=search&q=" + search)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
 
-      data.data.forEach((thing) => {
-        // console.log(element.title);
-        const tmpdiv = document.createElement("div");
-        tmpdiv.setAttribute("class", "text");
+        results_list.replaceChildren();
 
-        // TITLE
-        const title = document.createElement("h1");
-        title.setAttribute("class", "title");
-        title.appendChild(document.createTextNode(thing.title));
-        tmpdiv.appendChild(title);
+        data.data.forEach((thing) => {
+          // console.log(element.title);
+          const tmpdiv = document.createElement("div");
+          tmpdiv.setAttribute("class", "text");
 
-        // TYPE
-        const type = document.createElement("b");
-        type.appendChild(document.createTextNode(thing.type));
+          // TITLE
+          const title = document.createElement("h1");
+          title.setAttribute("class", "title");
+          title.appendChild(document.createTextNode(thing.title));
+          tmpdiv.appendChild(title);
 
-        // EPISODES
-        const episodes = document.createElement("span");
-        episodes.appendChild(type);
-        episodes.appendChild(document.createTextNode(" - "));
-        episodes.appendChild(
-          document.createTextNode(
-            `${thing.episodes} Episodes (${thing.status})`
-          )
-        );
-        episodes.setAttribute("class", "episodes");
+          // TYPE
+          const type = document.createElement("b");
+          type.appendChild(document.createTextNode(thing.type));
 
-        tmpdiv.appendChild(episodes);
+          // EPISODES
+          const episodes = document.createElement("span");
+          episodes.appendChild(type);
+          episodes.appendChild(document.createTextNode(" - "));
+          episodes.appendChild(
+            document.createTextNode(
+              `${thing.episodes} Episodes (${thing.status})`
+            )
+          );
+          episodes.setAttribute("class", "episodes");
 
-        // SEASON
-        const season = document.createElement("h1");
-        season.setAttribute("class", "season");
-        season.appendChild(
-          document.createTextNode(`${thing.season} ${thing.year}`)
-        );
-        tmpdiv.appendChild(season);
+          tmpdiv.appendChild(episodes);
 
-        const tmpA = document.createElement("a");
-        tmpA.setAttribute("href", thing.session);
-        // tmpA.setAttribute("target", "_blank");
-        // tmpA.setAttribute("rel", "noopener noreferrer");
-        tmpA.setAttribute("class", "result-link");
+          // SEASON
+          const season = document.createElement("h1");
+          season.setAttribute("class", "season");
+          season.appendChild(
+            document.createTextNode(`${thing.season} ${thing.year}`)
+          );
+          tmpdiv.appendChild(season);
 
-        const imgwrapper = document.createElement("div");
-        imgwrapper.setAttribute("class", "imgwrapper");
+          const tmpA = document.createElement("a");
+          tmpA.setAttribute("href", thing.session);
+          // tmpA.setAttribute("target", "_blank");
+          // tmpA.setAttribute("rel", "noopener noreferrer");
+          tmpA.setAttribute("class", "result-link");
 
-        const img = document.createElement("img");
-        img.setAttribute("src", thing.poster);
-        img.setAttribute("alt", thing.title);
-        img.setAttribute("class", "poster");
+          const imgwrapper = document.createElement("div");
+          imgwrapper.setAttribute("class", "imgwrapper");
 
-        imgwrapper.appendChild(img);
-        tmpA.appendChild(imgwrapper);
+          const img = document.createElement("img");
+          img.setAttribute("src", thing.poster);
+          img.setAttribute("alt", thing.title);
+          img.setAttribute("class", "poster");
 
-        tmpA.appendChild(tmpdiv);
-        results_list.appendChild(tmpA);
+          imgwrapper.appendChild(img);
+          tmpA.appendChild(imgwrapper);
+
+          tmpA.appendChild(tmpdiv);
+          results_list.appendChild(tmpA);
+        });
       });
-    });
-
-  console.log(search);
-}
+  }
+})();
