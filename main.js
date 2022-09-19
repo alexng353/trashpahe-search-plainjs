@@ -227,7 +227,7 @@ ${resetCss}
 
   function sigh() {
     const search = document.getElementById("search").value;
-    fetch("https://apapi.ayo.icu/api?m=search&q=" + search)
+    fetch("https://animepahe.com/api?m=search&q=" + search)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
